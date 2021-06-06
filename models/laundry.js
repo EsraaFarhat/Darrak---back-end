@@ -18,5 +18,16 @@ const laundrySchema = mongoose.Schema({
 
 const Laundry = mongoose.model("Laundry", laundrySchema);
 
+function validateLaundry(laundry) {
+  const schema = Joi.object({
+    name: Joi.string().required(),
+    phoneNumber: Joi.number(),
+    address: Joi.string().required(),
+  });
+  return schema.validate(laundry);
+}
+
 
 module.exports.Laundry = Laundry;
+module.exports.validate = validateRestaurant;
+

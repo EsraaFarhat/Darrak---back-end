@@ -42,7 +42,8 @@ const userSchema = mongoose.Schema({
   rating: Number,
   role: {
     type: String,
-    enum: ['admin', 'user']
+    enum: ['admin', 'user'],
+    default: "user",
   }
 });
 
@@ -66,8 +67,11 @@ function validateUser(user) {
     lname: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
-    gender: Joi.string().required(),
-    age: Joi.number().min(1).max(100),
+    nationalId: Joi.string().required(),
+    gender: Joi.string().allow(''),
+    phoneNumber: Joi.number(),
+    rating: Joi.number(),
+    role: Joi.string(),
   });
   return schema.validate(user);
 }

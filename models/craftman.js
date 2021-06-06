@@ -28,5 +28,19 @@ const craftManSchema = mongoose.Schema({
 
 const CraftMan = mongoose.model("CraftMan", craftManSchema);
 
+function validateCraftMan(craftMan) {
+  const schema = Joi.object({
+    fname: Joi.string().min(3).max(50).required(),
+    lname: Joi.string().min(3).max(50).required(),
+    gender: Joi.string().allow(''),
+    phoneNumber: Joi.number(),
+    profession: Joi.string().required(),
+    rating: Joi.number(),
+  });
+  return schema.validate(craftMan);
+}
+
 
 module.exports.CraftMan = CraftMan;
+module.exports.validate = validateCraftMan;
+
