@@ -7,8 +7,12 @@ const cors = require("cors");
 require('dotenv/config');
 require("express-async-errors");
 
-const users = require("./routes/users");
 const auth = require("./routes/auth");
+const users = require("./routes/users");
+const advertisements = require("./routes/advertisements");
+const laundries = require("./routes/laundries");
+const restaurants = require("./routes/restaurants");
+const craftmen = require("./routes/craftmen");
 const error = require("./middleware/error");
 
 const app = express();
@@ -16,8 +20,12 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use("/api/users", users);
+// app.use("/api/advertisements", advertisements);
+app.use("/api/laundries", laundries);
+// app.use("/api/restaurants", restaurants);
+// app.use("/api/craftmen", craftmen);
 app.use(error);
 
 //* Handel uncaught exceptions
