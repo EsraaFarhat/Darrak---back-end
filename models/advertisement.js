@@ -2,10 +2,10 @@ const mongoose = require("mongoose");
 require("./user");
 
 const advertisementSchema = mongoose.Schema({
-  image: {
+  images: [{
     type: String,
     required: true,
-  },
+  }],
   address: {
     type: String,
     required: true,
@@ -22,8 +22,21 @@ const advertisementSchema = mongoose.Schema({
       type: mongoose.Schema.Types.ObjectId,
       ref: "User"
   },
-  publishedAt: Date,
-  apartmentArea: Number
+  publishedAt:{ 
+    type: Date,
+    default: Date.now(),
+  },
+  apartmentArea: {
+    type: Number,
+    required: true
+  },
+  noOfRooms:{
+    type: Number,
+    required: true
+  },
+  description: {
+    type: String,
+  },
 });
 
 
@@ -31,12 +44,14 @@ const Advertisement = mongoose.model("Advertisement", advertisementSchema);
 
 function validateAdvertisement(advertisement) {
   const schema = Joi.object({
-    image: Joi.string().required(),
+    images: Joi.array().required(),
     address: Joi.string().required(),
     price: Joi.number().required(),
     internet: Joi.Boolean(),
-    apartmentArea: Joi.number(),
-    publishedAt: Joi.Date()
+    apartmentArea: Joi.number().required(),
+    noOfRooms: Joi.number().required(),
+    description: Joi.string(),
+    publishedAt: Joi.Date(),
   });
   return schema.validate(advertisement);
 }

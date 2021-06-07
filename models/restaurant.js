@@ -8,12 +8,17 @@ const restaurantSchema = mongoose.Schema({
   phoneNumber: {
     type: String,
     required: true,
+    minlength: 11,
+    maxlength: 11,
   },
   address: {
     type: String,
     required: true,
   },
-  menu: [String],
+  menu: [{
+    type: String,
+    required: true
+  }],
 });
 
 
@@ -24,7 +29,7 @@ function validateRestaurant(restaurant) {
     name: Joi.string().required(),
     phoneNumber: Joi.number(),
     address: Joi.string().required(),
-    menu: Joi.string(),
+    menu: Joi.array(),
   });
   return schema.validate(restaurant);
 }

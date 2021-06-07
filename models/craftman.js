@@ -17,12 +17,21 @@ const craftManSchema = mongoose.Schema({
     type: String,
     enum: ["male", "female"],
   },
-  phoneNumber: Number,
+  phoneNumber: {
+    type: String,
+    required: true,
+    minlength: 11,
+    maxlength: 11,
+  },
   profession: {
     type: String,
     required: true,
   },
-  rating: Number,
+  rating: {
+    type: Number,
+    minle: 0,
+    max: 5
+  },
 });
 
 

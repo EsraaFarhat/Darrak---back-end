@@ -32,14 +32,26 @@ const userSchema = mongoose.Schema({
   nationalId: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    minlength: 14,
+    maxlength: 14,
+    trim: true
   },
   gender: {
     type: String,
     enum: ["male", "female"],
   },
-  phoneNumber: Number,
-  rating: Number,
+  phoneNumber: {
+    type: String,
+    required: true,
+    minlength: 11,
+    maxlength: 11,
+  },
+  rating: {
+    type: Number,
+    minle: 0,
+    max: 5
+  },
   role: {
     type: String,
     enum: ['admin', 'user'],
@@ -67,7 +79,7 @@ function validateUser(user) {
     lname: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
-    nationalId: Joi.string().required(),
+    nationalId: Joi.string().required().min(14).max(14).trim(),
     gender: Joi.string().allow(''),
     phoneNumber: Joi.number(),
     rating: Joi.number(),

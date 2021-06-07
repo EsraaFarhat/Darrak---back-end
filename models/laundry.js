@@ -8,6 +8,8 @@ const laundrySchema = mongoose.Schema({
   phoneNumber: {
     type: String,
     required: true,
+    minlength: 11,
+    maxlength: 11,
   },
   address: {
     type: String,
@@ -29,5 +31,5 @@ function validateLaundry(laundry) {
 
 
 module.exports.Laundry = Laundry;
-module.exports.validate = validateRestaurant;
+module.exports.validate = validateLaundry;
 
