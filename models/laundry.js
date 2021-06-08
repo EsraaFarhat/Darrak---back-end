@@ -30,7 +30,16 @@ function validateLaundry(laundry) {
   return schema.validate(laundry);
 }
 
+function validateEditLaundry(laundry) {
+  const schema = Joi.object({
+    name: Joi.string(),
+    phoneNumber: Joi.string().length(11),
+    address: Joi.string(),
+  });
+  return schema.validate(laundry);
+}
 
 module.exports.Laundry = Laundry;
 module.exports.validate = validateLaundry;
+module.exports.editValidate = validateEditLaundry;
 
