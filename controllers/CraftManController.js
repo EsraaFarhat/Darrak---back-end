@@ -3,7 +3,12 @@ const _ = require("lodash");
 
 exports.getAllCraftMen = async (req, res, next) => {
   const craftmen = await CraftMan.find();
-  res.send(craftmen);
+  // res.send(craftmen);
+  res.status(200).json({
+    status: "success",
+    num: craftmen.length,
+    craftmen,
+  });
 };
 
 exports.createCraftMan = async (req, res, next) => {
