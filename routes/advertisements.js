@@ -53,6 +53,33 @@ router.post('/',async (req,res)=>{
     return res.status(500).send({ message: ' Error in Creating Advertisement.' });
 })
 
+router.put('/:id',  async (req,res)=>{
+    if(!mongoose.isValidObjectId(req.params.id)){
+        res.status(400).send('Invaild ID')
+    }
+    // const advertisement = await Advertisement.findById(req.body.advertisement);
+    // if(!advertisement) return res.status(400).send('Invaild advertisement')
+    
+    const advertisement = await Advertisement.findByIdAndUpdate(
+        req.params.id,
+        {
+            images: req.body.images,
+            address: req.body.address,
+            price: req.body.price,
+            internet: req.body.internet,
+            owner: req.body.owner,
+            publishedAt: Date.now(),
+            apartmentArea: req.body.apartmentArea,
+            noOfRooms: req.body.noOfRooms,
+            description: req.body.description,
+        },
+        {new: true}
+    );
+    if (!advertisement) {
+        return res.status(404).send("the advertisement cannot be updated!");
+    }
+    res.send(advertisement);
 
+})
 
 module.exports = router;
