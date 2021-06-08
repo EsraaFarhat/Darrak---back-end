@@ -23,7 +23,7 @@ app.use("/api/auth", auth);
 app.use("/api/users", users);
 app.use("/api/advertisements", advertisements);
 app.use("/api/laundries", laundries);
-// app.use("/api/restaurants", restaurants);
+app.use("/api/restaurants", restaurants);
 app.use("/api/craftmen", craftmen);
 app.use(error);
 
