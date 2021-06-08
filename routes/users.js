@@ -77,6 +77,13 @@ router.delete("/:id", auth, async (req, res, next) => {
   res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
 });
 
+// For profile page
+router.get("/me", auth, async (req, res, next) => {
+  let id = req.user._id;
+  const user = await User.findById(id)
+  res.send(user);
+});
+
 router.get("/:id", auth, async (req, res, next) => {
   let id = req.params.id;
   const user = await User.findById(id);
@@ -86,11 +93,5 @@ router.get("/:id", auth, async (req, res, next) => {
   res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
 });
 
-// For profile page
-router.get("/me", auth, async (req, res, next) => {
-  let id = req.user._id;
-  const user = await User.findById(id)
-  res.send(user);
-});
 
 module.exports = router;
