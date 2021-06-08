@@ -12,13 +12,6 @@ router.get("/",[auth, isAdmin], async (req, res, next) => {
   res.send(users);
 });
 
-router.get("/me", auth, async (req, res, next) => {
-  let id = req.user._id;
-  const user = await User.findById(id)
-  res.send(user);
-});
-
-
 router.post("/", async (req, res, next) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({message: error.details[0].message});
@@ -46,7 +39,7 @@ router.post("/", async (req, res, next) => {
 
 router.patch("/:id", auth, async (req, res, next) => {
   const { error } = editValidate(req.body);
-  if (error) return res.status(400).send(error.details[0].message);
+  if (error) return res.status(400).send({message: error.details[0].message});
 
   let id = req.params.id;
 
@@ -91,6 +84,13 @@ router.get("/:id", auth, async (req, res, next) => {
   if (!user) return res.status(400).send({message: "User not found!"});
 
   res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
+});
+
+// For profile page
+router.get("/me", auth, async (req, res, next) => {
+  let id = req.user._id;
+  const user = await User.findById(id)
+  res.send(user);
 });
 
 module.exports = router;

@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Joi = require('joi');
 
 const laundrySchema = mongoose.Schema({
   name: {
@@ -23,7 +24,7 @@ const Laundry = mongoose.model("Laundry", laundrySchema);
 function validateLaundry(laundry) {
   const schema = Joi.object({
     name: Joi.string().required(),
-    phoneNumber: Joi.number(),
+    phoneNumber: Joi.string().length(11).required(),
     address: Joi.string().required(),
   });
   return schema.validate(laundry);
