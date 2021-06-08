@@ -3,8 +3,7 @@ const express = require("express");
 const winston = require("winston");
 const cors = require("cors");
 
-
-require('dotenv/config');
+require("dotenv/config");
 require("express-async-errors");
 
 const auth = require("./routes/auth");
@@ -25,7 +24,7 @@ app.use("/api/users", users);
 app.use("/api/advertisements", advertisements);
 app.use("/api/laundries", laundries);
 // app.use("/api/restaurants", restaurants);
-// app.use("/api/craftmen", craftmen);
+app.use("/api/craftmen", craftmen);
 app.use(error);
 
 //* Handel uncaught exceptions
