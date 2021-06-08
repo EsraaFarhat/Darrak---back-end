@@ -10,7 +10,8 @@ router.get('/', async (req,res)=>{
     const advertisement = await Advertisement.find().populate('owner');
     if(!advertisement){
         res.status(500).json({
-            success: false
+            success: false,
+            message: "empty advertisement"
         })
     }
     res.send(advertisement);
@@ -18,7 +19,7 @@ router.get('/', async (req,res)=>{
 
 router.get('/:id', async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
-        res.status(400).send('Invaild ID')
+        res.status(400).send({ message:'Invaild ID'})
     }
     
     const advertisement = await Advertisement.findById(req.params.id).populate('owner');
@@ -55,10 +56,8 @@ router.post('/',async (req,res)=>{
 
 router.put('/:id',  async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
-        res.status(400).send('Invaild ID')
+        res.status(400).send({ message:'Invaild ID'})
     }
-    // const advertisement = await Advertisement.findById(req.body.advertisement);
-    // if(!advertisement) return res.status(400).send('Invaild advertisement')
     
     const advertisement = await Advertisement.findByIdAndUpdate(
         req.params.id,
@@ -76,14 +75,14 @@ router.put('/:id',  async (req,res)=>{
         {new: true}
     );
     if (!advertisement) {
-        return res.status(404).send("the advertisement cannot be updated!");
+        return res.status(404).send({message:"the advertisement cannot be updated!"});
     }
     res.send(advertisement);
 })
 
 router.delete('/:id', async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
-        res.status(400).send('Invaild ID')
+        res.status(400).send({ message:'Invaild ID'})
     }
     const advertisement = await Advertisement.findByIdAndRemove(req.params.id)
     if(!advertisement){
