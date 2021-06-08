@@ -40,4 +40,17 @@ router.patch("/:id", async (req, res, next) => {
   res.send(laundry);
 });
 
+router.delete("/:id", async (req, res, next) => {
+  let id = req.params.id;
+
+  const laundry = await Laundry.findByIdAndRemove(id, {
+    useFindAndModify: false,
+  });
+
+  if (!laundry) return res.status(404).send({ message: "Laundry not found" });
+
+  res.send(laundry);
+});
+
+
 module.exports = router;
