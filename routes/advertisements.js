@@ -54,7 +54,7 @@ router.post('/',async (req,res)=>{
     return res.status(500).send({ message: ' Error in Creating Advertisement.' });
 })
 
-router.put('/:id',  async (req,res)=>{
+router.patch('/:id',  async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send({ message:'Invaild ID'})
     }
