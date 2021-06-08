@@ -46,16 +46,18 @@ const userSchema = mongoose.Schema({
     required: true,
     minlength: 11,
     maxlength: 11,
+    trim: true
   },
   rating: {
     type: Number,
-    minle: 0,
-    max: 5
+    min: 0,
+    max: 5,
+    default: 0
   },
   role: {
     type: String,
     enum: ['admin', 'user'],
-    default: "user",
+    default: 'user',
   }
 });
 
@@ -79,14 +81,28 @@ function validateUser(user) {
     lname: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
     password: Joi.string().min(5).max(255).required(),
-    nationalId: Joi.string().required().min(14).max(14).trim(),
+    nationalId: Joi.string().required().min(14).length(14).trim(),
     gender: Joi.string().allow(''),
-    phoneNumber: Joi.number(),
-    rating: Joi.number(),
+    phoneNumber: Joi.string().length(11).trim(),
+    rating: Joi.number().min(0).max(5),
     role: Joi.string(),
+  });
+  return schema.validate(user);
+}
+
+function validateEditUser(user) {
+  const schema = Joi.object({
+    fname: Joi.string().min(3).max(50),
+    lname: Joi.string().min(3).max(50),
+    email: Joi.string().min(5).max(255).email(),
+    password: Joi.string().min(5).max(255),
+    nationalId: Joi.string().min(14).length(14).trim(),
+    gender: Joi.string().allow(''),
+    phoneNumber: Joi.string().length(11).trim(),
   });
   return schema.validate(user);
 }
 
 module.exports.User = User;
 module.exports.validate = validateUser;
+module.exports.editValidate = validateEditUser;
