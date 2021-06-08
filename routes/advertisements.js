@@ -79,7 +79,25 @@ router.put('/:id',  async (req,res)=>{
         return res.status(404).send("the advertisement cannot be updated!");
     }
     res.send(advertisement);
+})
 
+router.delete('/:id', async (req,res)=>{
+    if(!mongoose.isValidObjectId(req.params.id)){
+        res.status(400).send('Invaild ID')
+    }
+    const advertisement = await Advertisement.findByIdAndRemove(req.params.id)
+    if(!advertisement){
+        res.status(500).json({
+            success: false,
+            message: 'the advertisement with given ID was not found'
+        })
+    } else {
+        return res.status(200).json({
+            success: true,
+            message: 'advertisement is deleted'
+        });
+    }
+    
 })
 
 module.exports = router;
