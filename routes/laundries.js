@@ -35,7 +35,7 @@ router.patch("/:id", async (req, res, next) => {
     }
   );
 
-  if (!laundry) return res.status(404).send({ message: "Laundry not found" });
+  if (!laundry) return res.status(404).send({ message: "Laundry not found." });
 
   res.send(laundry);
 });
@@ -47,10 +47,18 @@ router.delete("/:id", async (req, res, next) => {
     useFindAndModify: false,
   });
 
-  if (!laundry) return res.status(404).send({ message: "Laundry not found" });
+  if (!laundry) return res.status(404).send({ message: "Laundry not found." });
 
   res.send(laundry);
 });
 
+router.get("/:id", async (req, res, next) => {
+  let id = req.params.id;
+  const laundry = await Laundry.findById(id);
+
+  if (!laundry) return res.status(400).send({ message: "Laundry not found." });
+
+  res.send(laundry);
+});
 
 module.exports = router;
