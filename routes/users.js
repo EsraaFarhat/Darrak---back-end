@@ -1,5 +1,6 @@
 const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");
+const isOwner = require("../middleware/isOwner");
 const { User, validate, editValidate } = require("../models/user");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
@@ -67,6 +68,9 @@ router.patch("/:id", auth, async (req, res, next) => {
 
 router.delete("/:id", auth, async (req, res, next) => {
   let id = req.params.id;
+
+  const test = await isOwner(req, id);
+  if(!test) return res.send({message: "You don't have the privilege to perform this action."})
 
   const user = await User.findByIdAndRemove(id, {
     useFindAndModify: false,
