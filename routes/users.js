@@ -1,6 +1,6 @@
 const auth = require("../middleware/auth");
 const isAdmin = require("../middleware/isAdmin");
-const isOwner = require("../middleware/isOwner");
+const hasPrivilege = require("../middleware/hasPrivilege");
 const { User, validate, editValidate } = require("../models/user");
 const _ = require("lodash");
 const bcrypt = require("bcrypt");
@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.get("/",[auth, isAdmin], async (req, res, next) => {
   const users = await User.find();
-  res.send(users);
+  res.send({users});
 });
 
 router.post("/", async (req, res, next) => {
@@ -35,14 +35,18 @@ router.post("/", async (req, res, next) => {
   await user.save();
   res
     .header("x-auth-token", token)
-    .send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
+    .send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 router.patch("/:id", auth, async (req, res, next) => {
+  let id = req.params.id;
+
+  const has_privilege = await hasPrivilege(req, id);
+  if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
+
   const { error } = editValidate(req.body);
   if (error) return res.status(400).send({message: error.details[0].message});
 
-  let id = req.params.id;
 
   if(req.body.email){
     let user = await User.findOne({ email: req.body.email });
@@ -62,30 +66,31 @@ router.patch("/:id", auth, async (req, res, next) => {
 
   if (!user) return res.status(404).send({message: "User not found"});
 
-  res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
+  res.send({user: _.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 
 });
 
 router.delete("/:id", auth, async (req, res, next) => {
   let id = req.params.id;
 
-  const test = await isOwner(req, id);
-  if(!test) return res.send({message: "You don't have the privilege to perform this action."})
-
+  
   const user = await User.findByIdAndRemove(id, {
     useFindAndModify: false,
   });
-
+  
   if (!user) return res.status(404).send({message: "User not found"});
-
-  res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
+  
+  const has_privilege = await hasPrivilege(req, id);
+  if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
+  
+  res.send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 // For profile page
 router.get("/me", auth, async (req, res, next) => {
   let id = req.user._id;
   const user = await User.findById(id)
-  res.send(user);
+  res.send({user});
 });
 
 router.get("/:id", auth, async (req, res, next) => {
@@ -94,7 +99,7 @@ router.get("/:id", auth, async (req, res, next) => {
 
   if (!user) return res.status(400).send({message: "User not found!"});
 
-  res.send(_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"]));
+  res.send({user: _.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 

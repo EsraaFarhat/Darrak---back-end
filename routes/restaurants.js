@@ -1,18 +1,21 @@
-const express = require('express');
+const auth = require("../middleware/auth");
+const isAdmin = require("../middleware/isAdmin");
 const {Restaurant} = require('../models/restaurant');
+
+const express = require('express');
 
 const router = express.Router();
 
-router.get('/', async(req, res) => {
+router.get('/',auth, async(req, res) => {
     const restaurants = await Restaurant.find();
-    res.send(restaurants);
+    res.send({restaurants});
 });
 
-router.get('/:id', getRestaurant,(req, res) => {
-    res.json(res.restaurant);
+router.get('/:id',auth, getRestaurant,(req, res) => {
+    res.json({restaurant: res.restaurant});
 });
 
-router.post('/', async(req, res) => {
+router.post('/',[auth, isAdmin], async(req, res) => {
     const restaurant = new Restaurant({
         name: req.body.name,
         phoneNumber: req.body.phoneNumber,
@@ -20,10 +23,10 @@ router.post('/', async(req, res) => {
         menu: req.body.menu
     });
     const newRestaurant = await restaurant.save();
-    res.status(201).json(newRestaurant);
+    res.status(201).json({newRestaurant});
 });
 
-router.patch('/:id', getRestaurant,async(req, res) => {
+router.patch('/:id',[auth, isAdmin], getRestaurant,async(req, res) => {
     if(req.body.name != null){
         res.restaurant.name = req.body.name;
     }
@@ -41,10 +44,10 @@ router.patch('/:id', getRestaurant,async(req, res) => {
     }
 
     const updatedRestaurant = await res.restaurant.save();
-    res.json(updatedRestaurant);
+    res.json({updatedRestaurant});
 });
 
-router.delete('/:id', getRestaurant, async(req, res) => {
+router.delete('/:id',[auth, isAdmin], getRestaurant, async(req, res) => {
         await res.restaurant.remove();
         res.json({message: 'Restaurant deleted'});
 });
