@@ -1,4 +1,5 @@
 const auth = require("../middleware/auth");
+const isAdmin = require("../middleware/isAdmin");
 const { CraftMan, validate } = require("../models/craftman");
 const CraftManController = require("../controllers/CraftManController");
 // const _ = require("lodash");
@@ -9,14 +10,14 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(CraftManController.getAllCraftMen)
-  .post(CraftManController.createCraftMan);
+  .get(auth, CraftManController.getAllCraftMen)
+  .post(auth, isAdmin, CraftManController.createCraftMan);
 
 router
   .route("/:id")
-  .get(CraftManController.getCraftMan)
-  .patch(CraftManController.updateCraftMan)
-  .delete(CraftManController.deleteCraftMan);
+  .get(auth, CraftManController.getCraftMan)
+  .patch(auth, isAdmin, CraftManController.updateCraftMan)
+  .delete(auth, isAdmin, CraftManController.deleteCraftMan);
 
 // router.get("/me", auth, async (req, res, next) => {
 //   let id = req.user._id;
