@@ -3,6 +3,7 @@ const hasPrivilege = require("../middleware/hasPrivilege");
 
 const { Advertisement } = require('../models/advertisement');
 const { User } = require('../models/user')
+const _ = require("lodash");
 
 const express = require('express');
 
@@ -38,12 +39,13 @@ router.get('/:id',auth, async (req,res)=>{
 
 router.post('/', auth, async (req,res)=>{
 
+    console.log(req.user)
     const advertisement =  new Advertisement({
         images: req.body.images,
         address: req.body.address,
         price: req.body.price,
         internet: req.body.internet,
-        owner: req.body.owner,          //! Get Id of the logged in user .. make it required
+        owner: req.user._id,          //! Get Id of the logged in user .. make it required
         publishedAt: Date.now(),
         apartmentArea: req.body.apartmentArea,
         noOfRooms: req.body.noOfRooms,
@@ -68,17 +70,7 @@ router.patch('/:id', auth,  async (req,res)=>{
     
     const advertisement = await Advertisement.findByIdAndUpdate(
         req.params.id,
-        {
-            images: req.body.images,
-            address: req.body.address,
-            price: req.body.price,
-            internet: req.body.internet,
-            owner: req.body.owner,           //! Get Id of the logged in user .. make it required
-            publishedAt: Date.now(),
-            apartmentArea: req.body.apartmentArea,
-            noOfRooms: req.body.noOfRooms,
-            description: req.body.description,
-        },
+        _.pick(req.body, ["images", "address", "price","internet","apartmentArea","noOfRooms","description"]),      
         {new: true}
     );
     if (!advertisement) {

@@ -20,7 +20,8 @@ const advertisementSchema = mongoose.Schema({
   },
   owner: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User"
+      ref: "User",
+      required: true,
   },
   publishedAt:{ 
     type: Date,
