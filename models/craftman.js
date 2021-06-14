@@ -27,6 +27,9 @@ const craftManSchema = mongoose.Schema({
     type: String,
     required: true,
   },
+  location: {
+    type: String,
+  },
   rating: {
     type: Number,
     min: 0,
