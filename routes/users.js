@@ -6,6 +6,7 @@ const _ = require("lodash");
 const bcrypt = require("bcrypt");
 const express = require("express");
 const authController = require("../controllers/authController");
+const Email = require("../util/email");
 
 const router = express.Router();
 
@@ -54,6 +55,13 @@ router.post("/", async (req, res, next) => {
   const token = user.generateAuthToken();
 
   await user.save();
+
+  //send welcome mail
+  const url = `${req.protocol}://${req.get("host")}/api/users/me`;
+  // http://127.0.0.1:3000/me
+  // http://127.0.0.1:3000/api/users/me
+  console.log("url = ", url);
+  await new Email(user, url).sendWelcome();
 
   res.header("x-auth-token", token).send({
     user: _.pick(user, [
