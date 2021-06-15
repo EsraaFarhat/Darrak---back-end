@@ -20,7 +20,8 @@ router.post('/',[auth, isAdmin], async(req, res) => {
         name: req.body.name,
         phoneNumber: req.body.phoneNumber,
         address: req.body.address,
-        menu: req.body.menu
+        menu: req.body.menu,
+        image: req.body.image
     });
     const newRestaurant = await restaurant.save();
     res.status(201).json({newRestaurant});
@@ -41,6 +42,9 @@ router.patch('/:id',[auth, isAdmin], getRestaurant,async(req, res) => {
 
     if(req.body.menu != null){
         res.restaurant.menu = req.body.menu;
+    }
+    if(req.body.image != null){
+        res.restaurant.image = req.body.image;
     }
 
     const updatedRestaurant = await res.restaurant.save();
