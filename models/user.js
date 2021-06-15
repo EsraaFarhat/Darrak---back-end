@@ -58,7 +58,11 @@ const userSchema = mongoose.Schema({
     type: String,
     enum: ['admin', 'user'],
     default: 'user',
-  }
+  },
+  favourites : [{
+    type: Array,
+    default: []
+  }],
 });
 
 userSchema.methods.generateAuthToken = function () {
