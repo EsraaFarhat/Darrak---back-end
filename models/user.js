@@ -4,6 +4,10 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 
 const userSchema = mongoose.Schema({
+  image: {
+    type: String,
+    default: "https://genslerzudansdentistry.com/wp-content/uploads/2015/11/anonymous-user.png"
+  },
   fname: {
     type: String,
     required: true,
@@ -77,6 +81,7 @@ const User = mongoose.model("User", userSchema);
 
 function validateUser(user) {
   const schema = Joi.object({
+    image: Joi.string(),
     fname: Joi.string().min(3).max(50).required(),
     lname: Joi.string().min(3).max(50).required(),
     email: Joi.string().min(5).max(255).required().email(),
@@ -92,6 +97,7 @@ function validateUser(user) {
 
 function validateEditUser(user) {
   const schema = Joi.object({
+    image: Joi.string(),
     fname: Joi.string().min(3).max(50),
     lname: Joi.string().min(3).max(50),
     email: Joi.string().min(5).max(255).email(),

@@ -65,9 +65,6 @@ router.patch('/:id', [auth, hasPrivilege],  async (req,res)=>{
         res.status(400).send({ message:'Invaild ID'})
     }
 
-    // const has_privilege = await hasPrivilege(req, req.params.id);
-    // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
-    
     const advertisement = await Advertisement.findByIdAndUpdate(
         req.params.id,
         _.pick(req.body, ["images", "address", "price","internet","apartmentArea","noOfRooms","description"]),      
@@ -83,9 +80,6 @@ router.delete('/:id', [auth, hasPrivilege], async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send({ message:'Invaild ID'})
     }
-
-    // const has_privilege = await hasPrivilege(req, req.params.id);
-    // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
 
     const advertisement = await Advertisement.findByIdAndRemove(req.params.id)
     if(!advertisement){

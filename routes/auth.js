@@ -24,6 +24,12 @@ router.post("/", async (req, res, next) => {
   });
 });
 
+
+// router.get('/logout', async(req, res, next) => {
+//   res.removeHeader('x-auth-token');
+//   res.status(200).send({message: 'Bye Bye!'});
+// });
+
 function validate(req) {
   const schema = Joi.object({
     email: Joi.string().min(5).max(255).required().email(),

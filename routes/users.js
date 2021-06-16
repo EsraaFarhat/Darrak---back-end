@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
   if (user) return res.status(400).send({message: "National id has already been token. try another one."});
 
   user = new User(
-    _.pick(req.body, ["fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating", "role"])
+    _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating", "role"])
   );
 
   const salt = await bcrypt.genSalt(10);
@@ -35,14 +35,11 @@ router.post("/", async (req, res, next) => {
   await user.save();
   res
     .header("x-auth-token", token)
-    .send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+    .send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
   let id = req.params.id;
-
-  // const has_privilege = await hasPrivilege(req, id);
-  // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
 
   const { error } = editValidate(req.body);
   if (error) return res.status(400).send({message: error.details[0].message});
@@ -63,14 +60,14 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
   }
 
-  user = await User.findByIdAndUpdate(id, _.pick(req.body, ["fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating"]), {
+  user = await User.findByIdAndUpdate(id, _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating"]), {
     new: true,
     useFindAndModify: false,
   });
 
   if (!user) return res.status(404).send({message: "User not found"});
 
-  res.send({user: _.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 
 });
 
@@ -84,10 +81,8 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res, next) => {
   
   if (!user) return res.status(404).send({message: "User not found"});
   
-  // const has_privilege = await hasPrivilege(req, id);
-  // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
   
-  res.send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 // For profile page
@@ -103,7 +98,7 @@ router.get("/:id", auth, async (req, res, next) => {
 
   if (!user) return res.status(400).send({message: "User not found!"});
 
-  res.send({user: _.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
 

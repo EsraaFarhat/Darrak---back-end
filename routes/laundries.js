@@ -17,7 +17,7 @@ router.post("/",[auth, isAdmin], async (req, res, next) => {
   const { error } = validate(req.body);
   if (error) return res.status(400).send({ message: error.details[0].message });
 
-  laundry = new Laundry(_.pick(req.body, ["name", "phoneNumber", "address"]));
+  laundry = new Laundry(_.pick(req.body, ["image", "name", "phoneNumber", "address"]));
 
   await laundry.save();
   res.send({laundry});
@@ -31,7 +31,7 @@ router.patch("/:id",[auth, isAdmin], async (req, res, next) => {
 
   laundry = await Laundry.findByIdAndUpdate(
     id,
-    _.pick(req.body, ["name", "phoneNumber", "address"]),
+    _.pick(req.body, ["image", "name", "phoneNumber", "address"]),
     {
       new: true,
       useFindAndModify: false,
