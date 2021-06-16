@@ -38,11 +38,11 @@ router.post("/", async (req, res, next) => {
     .send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
 
-router.patch("/:id", auth, async (req, res, next) => {
+router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
   let id = req.params.id;
 
-  const has_privilege = await hasPrivilege(req, id);
-  if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
+  // const has_privilege = await hasPrivilege(req, id);
+  // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
 
   const { error } = editValidate(req.body);
   if (error) return res.status(400).send({message: error.details[0].message});
@@ -58,6 +58,10 @@ router.patch("/:id", auth, async (req, res, next) => {
     if (user) return res.status(400).send({message: "National id is already in use. try another one."});
   }
 
+  if(req.body.password){
+    const salt = await bcrypt.genSalt(10);
+    req.body.password = await bcrypt.hash(req.body.password, salt);
+  }
 
   user = await User.findByIdAndUpdate(id, _.pick(req.body, ["fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating"]), {
     new: true,
@@ -70,7 +74,7 @@ router.patch("/:id", auth, async (req, res, next) => {
 
 });
 
-router.delete("/:id", auth, async (req, res, next) => {
+router.delete("/:id", [auth, hasPrivilege], async (req, res, next) => {
   let id = req.params.id;
 
   
@@ -80,8 +84,8 @@ router.delete("/:id", auth, async (req, res, next) => {
   
   if (!user) return res.status(404).send({message: "User not found"});
   
-  const has_privilege = await hasPrivilege(req, id);
-  if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
+  // const has_privilege = await hasPrivilege(req, id);
+  // if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
   
   res.send({user:_.pick(user, ["_id", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
 });
