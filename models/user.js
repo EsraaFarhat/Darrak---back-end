@@ -62,6 +62,11 @@ const userSchema = mongoose.Schema({
     type: String,
     enum: ['admin', 'user'],
     default: 'user',
+  },
+  status: {
+    type: String,
+    enum: ['not verified', 'pending', 'verified'],
+    default: 'not verified'
   }
 });
 
@@ -91,6 +96,7 @@ function validateUser(user) {
     phoneNumber: Joi.string().length(11).trim(),
     rating: Joi.number().min(0).max(5),
     role: Joi.string(),
+    status: Joi.string()
   });
   return schema.validate(user);
 }
@@ -105,6 +111,7 @@ function validateEditUser(user) {
     nationalId: Joi.string().min(14).length(14).trim(),
     gender: Joi.string().allow(''),
     phoneNumber: Joi.string().length(11).trim(),
+    status: Joi.string()
   });
   return schema.validate(user);
 }

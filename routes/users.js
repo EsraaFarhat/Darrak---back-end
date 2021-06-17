@@ -24,7 +24,7 @@ router.post("/", async (req, res, next) => {
   if (user) return res.status(400).send({message: "National id has already been token. try another one."});
 
   user = new User(
-    _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating", "role"])
+    _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating", "role", "status"])
   );
 
   const salt = await bcrypt.genSalt(10);
@@ -35,7 +35,7 @@ router.post("/", async (req, res, next) => {
   await user.save();
   res
     .header("x-auth-token", token)
-    .send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+    .send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role", "status"])});
 });
 
 router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
@@ -60,14 +60,14 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, salt);
   }
 
-  user = await User.findByIdAndUpdate(id, _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating"]), {
+  user = await User.findByIdAndUpdate(id, _.pick(req.body, ["image", "fname", "lname", "email", "password", "gender", "nationalId", "phoneNumber", "rating", "status"]), {
     new: true,
     useFindAndModify: false,
   });
 
   if (!user) return res.status(404).send({message: "User not found"});
 
-  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role", "status"])});
 
 });
 
@@ -82,7 +82,7 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res, next) => {
   if (!user) return res.status(404).send({message: "User not found"});
   
   
-  res.send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user:_.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role", "status"])});
 });
 
 // For profile page
@@ -98,7 +98,7 @@ router.get("/:id", auth, async (req, res, next) => {
 
   if (!user) return res.status(400).send({message: "User not found!"});
 
-  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role"])});
+  res.send({user: _.pick(user, ["_id", "image", "fname", "lname", "email", "nationalId", "phoneNumber", "rating", "role", "status"])});
 });
 
 
