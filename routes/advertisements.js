@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/',auth, async (req,res)=>{
-    const advertisement = await Advertisement.find().populate('owner');
+    const advertisement = await Advertisement.find().populate('owner').sort({'publishedAt': -1});;
     if(!advertisement){
         res.status(500).json({
             success: false,
@@ -100,6 +100,16 @@ router.delete('/:id', auth, async (req,res)=>{
         });
     }
     
+})
+
+router.get('/get/useradvertisement', auth, async (req, res) =>{
+    console.log(req.user)
+    const userAdvertidementList = await Advertisement.find({owner: req.user._id}).sort({'publishedAt': -1});
+
+    if(!userAdvertidementList) {
+        res.status(500).json({success: false})
+    } 
+    res.send(userAdvertidementList);
 })
 
 module.exports = router;
