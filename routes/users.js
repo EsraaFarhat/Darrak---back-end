@@ -60,7 +60,6 @@ router.post("/", async (req, res, next) => {
   const url = `${req.protocol}://${req.get("host")}/api/users/me`;
   // http://127.0.0.1:3000/me
   // http://127.0.0.1:3000/api/users/me
-  console.log("url = ", url);
   await new Email(
     user,
     `Welcome to Darrak, we're glad to have you 🏠`
