@@ -40,6 +40,7 @@ router.post("/", async (req, res, next) => {
 
 router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
   let id = req.params.id;
+  let updatedUser = await User.findById(id);
 
   const { error } = editValidate(req.body);
   if (error) return res.status(400).send({message: error.details[0].message});
@@ -47,12 +48,12 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
 
   if(req.body.email){
     let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send({message: "Email is already in use. try another one."});
+    if (user && user.email != updatedUser.email) return res.status(400).send({message: "Email is already in use. try another one."});
   }
 
   if(req.body.nationalId){
     let user = await User.findOne({ nationalId: req.body.nationalId });
-    if (user) return res.status(400).send({message: "National id is already in use. try another one."});
+    if (user && user.nationalId != updatedUser.nationalId) return res.status(400).send({message: "National id is already in use. try another one."});
   }
 
   if(req.body.password){
