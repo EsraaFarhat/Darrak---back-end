@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const Joi = require('joi');
 
 const laundrySchema = mongoose.Schema({
+  image:{
+    type: String,
+    default: "https://image.freepik.com/free-vector/laundry-room-flat-design-vector-illustration_82574-882.jpg"
+  },
   name: {
     type: String,
     required: true,
@@ -23,6 +27,7 @@ const Laundry = mongoose.model("Laundry", laundrySchema);
 
 function validateLaundry(laundry) {
   const schema = Joi.object({
+    image: Joi.string(),
     name: Joi.string().required(),
     phoneNumber: Joi.string().length(11).required(),
     address: Joi.string().required(),
@@ -32,6 +37,7 @@ function validateLaundry(laundry) {
 
 function validateEditLaundry(laundry) {
   const schema = Joi.object({
+    image: Joi.string(),
     name: Joi.string(),
     phoneNumber: Joi.string().length(11),
     address: Joi.string(),

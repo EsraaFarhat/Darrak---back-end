@@ -60,14 +60,11 @@ router.post('/', auth, async (req,res)=>{
     return res.status(500).send({ message: ' Error in Creating Advertisement.' });
 })
 
-router.patch('/:id', auth,  async (req,res)=>{
+router.patch('/:id', [auth, hasPrivilege],  async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send({ message:'Invaild ID'})
     }
 
-    const has_privilege = await hasPrivilege(req, req.params.id);
-    if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
-    
     const advertisement = await Advertisement.findByIdAndUpdate(
         req.params.id,
         _.pick(req.body, ["images", "address", "price","internet","apartmentArea","noOfRooms","description"]),      
@@ -79,13 +76,10 @@ router.patch('/:id', auth,  async (req,res)=>{
     res.send({advertisement});
 })
 
-router.delete('/:id', auth, async (req,res)=>{
+router.delete('/:id', [auth, hasPrivilege], async (req,res)=>{
     if(!mongoose.isValidObjectId(req.params.id)){
         res.status(400).send({ message:'Invaild ID'})
     }
-
-    const has_privilege = await hasPrivilege(req, req.params.id);
-    if(!has_privilege) return res.send({message: "You don't have the privilege to perform this action."})
 
     const advertisement = await Advertisement.findByIdAndRemove(req.params.id)
     if(!advertisement){
