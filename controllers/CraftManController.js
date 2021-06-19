@@ -17,7 +17,14 @@ exports.createCraftMan = async (req, res, next) => {
     return res.status(400).send({ message: "account already exist!" });
   console.log("in create");
   craftMan = new CraftMan(
-    _.pick(req.body, ["fname", "lname", "gender", "phoneNumber", "profession"])
+    _.pick(req.body, [
+      "fname",
+      "lname",
+      "gender",
+      "phoneNumber",
+      "profession",
+      "location",
+    ])
   );
 
   await craftMan.save();
@@ -58,6 +65,7 @@ exports.updateCraftMan = async (req, res, next) => {
     "gender",
     "phoneNumber",
     "profession",
+    "location",
   ]);
   craftman = await CraftMan.findByIdAndUpdate(id, craftman, { new: true });
 

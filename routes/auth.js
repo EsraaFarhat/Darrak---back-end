@@ -7,22 +7,33 @@ const router = express.Router();
 
 router.post("/", async (req, res, next) => {
   const { error } = validate(req.body);
-  if (error) return res.status(400).send({message: error.details[0].message});
+  if (error) return res.status(400).send({ message: error.details[0].message });
 
   let user = await User.findOne({ email: req.body.email });
-  if (!user) return res.status(400).send({message: "Invalid email or password!"});
-
+  if (!user)
+    return res.status(400).send({ message: "Invalid email or password!" });
+  console.log("email ok");
   const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) return res.status(400).send({message: "Invalid email or password!"});
+  console.log("validPassword = ", validPassword);
+  console.log("req.body.password= ", req.body.password);
+  console.log("user.password= ", user.password);
+
+  if (!validPassword)
+    return res.status(400).send({ message: "Invalid email or password!" });
 
   const token = user.generateAuthToken();
 
   res.json({
     api_token: token,
     fname: user.fname,
-    lname: user.lname
+    lname: user.lname,
   });
 });
+
+// router.get('/logout', async(req, res, next) => {
+//   res.removeHeader('x-auth-token');
+//   res.status(200).send({message: 'Bye Bye!'});
+// });
 
 function validate(req) {
   const schema = Joi.object({
