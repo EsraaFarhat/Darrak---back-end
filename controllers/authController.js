@@ -63,14 +63,11 @@ exports.resetPassword = async (req, res, next) => {
   //   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = undefined;
   user.passwordResetExpires = undefined;
-  console.log("before save");
   await user.save();
 
   // 3) Update changedPasswordAt property for the user
   // 4) Log the user in, send JWT
-  console.log("before generateAuthToken");
   const token = user.generateAuthToken();
-  console.log("after generateAuthToken");
   res.header("x-auth-token", token).send({
     user: _.pick(user, [
       "_id",

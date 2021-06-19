@@ -6,11 +6,12 @@ module.exports = class Email {
     this.to = user.email;
     this.firstName = user.fname;
     this.url = url;
-    this.from = `mohamed magdy <${process.env.EMAIL_FROM}>`;
+    this.from = `Darrak <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
     // Sendgrid
+
     return nodemailer.createTransport({
       service: "SendGrid",
       auth: {
@@ -30,6 +31,7 @@ module.exports = class Email {
     // });
 
     // 2) Define email options
+    console.log("url in = ", this.url);
     const mailOptions = {
       from: this.from,
       to: this.to,
@@ -49,7 +51,7 @@ module.exports = class Email {
   async sendPasswordReset() {
     await this.send(
       "passwordReset",
-      "Your password reset token (valid for only 10 minutes)"
+      "Please click the link provided, to reset your password"
     );
   }
 };
