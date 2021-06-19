@@ -5,29 +5,17 @@ module.exports = class Email {
   constructor(user, url) {
     this.to = user.email;
     this.firstName = user.fname;
-    console.log("in constructor");
     this.url = url;
-    this.from = `Jonas Schmedtmann <${process.env.EMAIL_FROM}>`;
+    this.from = `mohamed magdy <${process.env.EMAIL_FROM}>`;
   }
 
   newTransport() {
-    if (process.env.NODE_ENV === "production") {
-      // Sendgrid
-      return nodemailer.createTransport({
-        service: "SendGrid",
-        auth: {
-          user: process.env.SENDGRID_USERNAME,
-          pass: process.env.SENDGRID_PASSWORD,
-        },
-      });
-    }
-    console.log("createTransport");
+    // Sendgrid
     return nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
+      service: "SendGrid",
       auth: {
-        user: process.env.EMAIL_USERNAME,
-        pass: process.env.EMAIL_PASSWORD,
+        user: process.env.SENDGRID_USERNAME,
+        pass: process.env.SENDGRID_PASSWORD,
       },
     });
   }
@@ -50,21 +38,18 @@ module.exports = class Email {
       //   text: htmlToText.fromString(html),
       text: this.url,
     };
-    console.log("mailOptions done");
     // 3) Create a transport and send email
     await this.newTransport().sendMail(mailOptions);
   }
 
   async sendWelcome() {
-    await this.send("welcome", "Welcome to the Natours Family!");
+    await this.send("welcome", "Welcome to the Darrak !");
   }
 
   async sendPasswordReset() {
-    console.log("hiiiiiiiiiiiii");
     await this.send(
       "passwordReset",
       "Your password reset token (valid for only 10 minutes)"
     );
-    console.log("hiiiiiiiiiiiii22222");
   }
 };

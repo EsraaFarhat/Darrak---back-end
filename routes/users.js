@@ -61,7 +61,10 @@ router.post("/", async (req, res, next) => {
   // http://127.0.0.1:3000/me
   // http://127.0.0.1:3000/api/users/me
   console.log("url = ", url);
-  await new Email(user, url).sendWelcome();
+  await new Email(
+    user,
+    `Welcome to Darrak, we're glad to have you 🏠`
+  ).sendWelcome();
 
   res.header("x-auth-token", token).send({
     user: _.pick(user, [
