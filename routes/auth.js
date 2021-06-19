@@ -30,7 +30,6 @@ router.post("/", async (req, res, next) => {
   });
 });
 
-
 // router.get('/logout', async(req, res, next) => {
 //   res.removeHeader('x-auth-token');
 //   res.status(200).send({message: 'Bye Bye!'});

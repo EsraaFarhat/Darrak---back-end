@@ -12,6 +12,7 @@ const advertisements = require("./routes/advertisements");
 const laundries = require("./routes/laundries");
 const restaurants = require("./routes/restaurants");
 const craftmen = require("./routes/craftmen");
+const user_verification = require('./routes/user_verification');
 const error = require("./middleware/error");
 
 const app = express();
@@ -25,6 +26,7 @@ app.use("/api/advertisements", advertisements);
 app.use("/api/laundries", laundries);
 app.use("/api/restaurants", restaurants);
 app.use("/api/craftmen", craftmen);
+app.use('/api/verify', user_verification);
 app.use(error);
 
 //* Handel uncaught exceptions

@@ -8,7 +8,8 @@ const crypto = require("crypto");
 const userSchema = mongoose.Schema({
   image: {
     type: String,
-    default: "https://genslerzudansdentistry.com/wp-content/uploads/2015/11/anonymous-user.png"
+    default:
+      "https://genslerzudansdentistry.com/wp-content/uploads/2015/11/anonymous-user.png",
   },
   fname: {
     type: String,
@@ -65,6 +66,11 @@ const userSchema = mongoose.Schema({
     enum: ["admin", "user"],
     default: "user",
   },
+  status: {
+    type: String,
+    enum: ["not verified", "pending", "verified"],
+    default: "not verified",
+  },
   passwordResetExpires: Date,
   passwordResetToken: String,
 });
@@ -107,6 +113,7 @@ userSchema.methods.generateAuthToken = function () {
       _id: this._id,
       email: this.email,
       role: this.role,
+      status: this.status,
     },
     process.env.jwtPrivateKey
   );
@@ -127,6 +134,7 @@ function validateUser(user) {
     phoneNumber: Joi.string().length(11).trim(),
     rating: Joi.number().min(0).max(5),
     role: Joi.string(),
+    status: Joi.string(),
   });
   return schema.validate(user);
 }
@@ -141,6 +149,7 @@ function validateEditUser(user) {
     nationalId: Joi.string().min(14).length(14).trim(),
     gender: Joi.string().allow(""),
     phoneNumber: Joi.string().length(11).trim(),
+    status: Joi.string(),
   });
   return schema.validate(user);
 }
