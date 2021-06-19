@@ -1,5 +1,6 @@
 const auth = require("../middleware/auth");
 const hasPrivilege = require("../middleware/hasPrivilege");
+const isVerified = require("../middleware/isVerified");
 
 const { Advertisement } = require('../models/advertisement');
 const { User } = require('../models/user')
@@ -37,7 +38,7 @@ router.get('/:id',auth, async (req,res)=>{
     res.status(200).send({advertisement});
 })
 
-router.post('/', auth, async (req,res)=>{
+router.post('/', [auth, isVerified], async (req,res)=>{
 
     console.log(req.user)
     const advertisement =  new Advertisement({
@@ -45,7 +46,7 @@ router.post('/', auth, async (req,res)=>{
         address: req.body.address,
         price: req.body.price,
         internet: req.body.internet,
-        owner: req.user._id,          //! Get Id of the logged in user .. make it required
+        owner: req.user._id,
         publishedAt: Date.now(),
         apartmentArea: req.body.apartmentArea,
         noOfRooms: req.body.noOfRooms,

@@ -75,7 +75,8 @@ userSchema.methods.generateAuthToken = function () {
     {
       _id: this._id,
       email: this.email,
-      role: this.role
+      role: this.role,
+      status: this.status
     },
     process.env.jwtPrivateKey
   );

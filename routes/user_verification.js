@@ -8,8 +8,8 @@ const express = require('express');
 const router = express.Router();
 
 // user request to verify his account
-router.patch('/:id', auth, async (req, res, next) => {
-    let id = req.params.id;
+router.patch('/', auth, async (req, res, next) => {
+    let id = req.user._id;
 
     let user = await User.findByIdAndUpdate(
         id,
