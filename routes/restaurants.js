@@ -7,7 +7,14 @@ const express = require('express');
 const router = express.Router();
 
 router.get('/',auth, async(req, res) => {
-    const restaurants = await Restaurant.find();
+    let filter = {};
+    if(req.query.location)
+    {
+        filter = {
+                    location: req.query.location,
+                }
+    }
+    const restaurants = await Restaurant.find(filter);
     res.send({restaurants});
 });
 
