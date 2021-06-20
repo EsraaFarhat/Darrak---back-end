@@ -13,7 +13,8 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/',auth, async (req,res)=>{
-    const advertisement = await Advertisement.find().populate('owner').sort({'publishedAt': -1});;
+   
+    const advertisement = await Advertisement.find(filter).sort({'publishedAt': -1});
     if(!advertisement){
         res.status(500).json({
             success: false,
@@ -107,4 +108,15 @@ router.get('/get/useradvertisement', auth, async (req, res) =>{
     res.send(userAdvertidementList);
 })
 
+
+router.get('/filter/location',auth, async (req,res)=>{
+    const advertisement = await Advertisement.find({address:'Mansoura - El-mashaya street'}).sort({'publishedAt': -1});;
+    if(!advertisement){
+        res.status(500).json({
+            success: false,
+            message: "empty advertisement"
+        })
+    }
+    res.send({advertisement});
+})
 module.exports = router;
