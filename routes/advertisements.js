@@ -1,6 +1,7 @@
 const auth = require("../middleware/auth");
 const hasPrivilege = require("../middleware/hasPrivilege");
 const isVerified = require("../middleware/isVerified");
+const adController = require("../controllers/adController");
 
 const { Advertisement } = require("../models/advertisement");
 const { User } = require("../models/user");
@@ -41,30 +42,12 @@ router.get("/:id", auth, async (req, res) => {
   res.status(200).send({ advertisement });
 });
 
-router.post("/", [auth, isVerified], async (req, res) => {
-  console.log(req.user);
-  const advertisement = new Advertisement({
-    images: req.body.images,
-    address: req.body.address,
-    price: req.body.price,
-    internet: req.body.internet,
-    owner: req.user._id,
-    publishedAt: Date.now(),
-    apartmentArea: req.body.apartmentArea,
-    noOfRooms: req.body.noOfRooms,
-    description: req.body.description,
-  });
-  const createdadvertisement = await advertisement.save();
-  if (createdadvertisement) {
-    return res
-      .status(201)
-      .send({
-        message: "new advertisement created",
-        data: createdadvertisement,
-      });
-  }
-  return res.status(500).send({ message: " Error in Creating Advertisement." });
-});
+router.post(
+  "/",
+  [auth, isVerified],
+  adController.createAd,
+  adController.getCheckoutSession
+);
 
 router.patch("/:id", [auth, hasPrivilege], async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {

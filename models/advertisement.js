@@ -46,8 +46,8 @@ const advertisementSchema = mongoose.Schema({
   },
 });
 
-advertisementSchema.pre(/^find/, function (next) {
-  this.find({ hidden: { $ne: false } });
+advertisementSchema.pre("find", function (next) {
+  this.find({ hidden: { $ne: true } });
   next();
 });
 
