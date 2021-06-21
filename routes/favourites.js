@@ -16,6 +16,12 @@ router.get('/',auth, async(req, res) => {
     res.send({favourites});
 });
 
+router.get('/:advId',auth, async(req, res) => {
+  const favourite = await Favourite.findOne({advertismentFrom: req.params.advId, userFrom: req.user._id});
+  if(!favourite) return res.send({isFavourite: false});
+  res.send({isFavourite: true});
+});
+
 router.post('/',auth, async(req, res) => {
     const favourite = new Favourite({
         advertismentFrom: req.body.advertismentFrom,
@@ -25,7 +31,7 @@ router.post('/',auth, async(req, res) => {
     res.status(201).json({newFavourite});
 });
 
-router.delete('/:id',auth, getFavourites, async(req, res) => {
+router.delete('/:advId',auth, getFavourites, async(req, res) => {
     await res.favourite.remove();
     res.json({message: 'Favourite deleted'});
 });
@@ -33,7 +39,8 @@ router.delete('/:id',auth, getFavourites, async(req, res) => {
 async function getFavourites(req, res, next) {
     let favourite
     try {
-        favourite = await Favourite.findById(req.params.id)
+        favourite = await Favourite.findOne({advertismentFrom: req.params.advId, userFrom: req.user._id})
+        // {advertismentFrom: req.params.advId, userFrom: req.user._id}
       if (favourite == null) {
         return res.status(404).json({ message: 'Cannot find favourite' })
       }
