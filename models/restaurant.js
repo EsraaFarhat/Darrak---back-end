@@ -22,7 +22,13 @@ const restaurantSchema = mongoose.Schema({
   image: {
     type: String,
     required: true,
-  }
+  },
+  location:{
+    type: String,
+    enum: ["Talkha", "El-mashaya","Hy-ElGamaa", "Mit-Khamees"],
+    required: true,
+  },
+
 });
 
 

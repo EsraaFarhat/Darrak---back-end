@@ -13,7 +13,14 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/',auth, async (req,res)=>{
-    const advertisement = await Advertisement.find().populate('owner').sort({'publishedAt': -1});;
+    let filter = {};
+    if(req.query.location)
+    {
+        filter = {
+                    location: req.query.location,
+                }
+    }
+    const advertisement = await Advertisement.find(filter).sort({'publishedAt': -1});
     if(!advertisement){
         res.status(500).json({
             success: false,
@@ -43,6 +50,7 @@ router.post('/', [auth, isVerified], async (req,res)=>{
     console.log(req.user)
     const advertisement =  new Advertisement({
         images: req.body.images,
+        location: req.body.location,
         address: req.body.address,
         price: req.body.price,
         internet: req.body.internet,
@@ -68,7 +76,7 @@ router.patch('/:id', [auth, hasPrivilege],  async (req,res)=>{
 
     const advertisement = await Advertisement.findByIdAndUpdate(
         req.params.id,
-        _.pick(req.body, ["images", "address", "price","internet","apartmentArea","noOfRooms","description"]),      
+        _.pick(req.body, ["images", "address", "location" ,"price","internet","apartmentArea","noOfRooms","description"]),      
         {new: true}
     );
     if (!advertisement) {
@@ -107,4 +115,15 @@ router.get('/get/useradvertisement', auth, async (req, res) =>{
     res.send(userAdvertidementList);
 })
 
+
+router.get('/filter/location',auth, async (req,res)=>{
+    const advertisement = await Advertisement.find({address:'Mansoura - El-mashaya street'}).sort({'publishedAt': -1});;
+    if(!advertisement){
+        res.status(500).json({
+            success: false,
+            message: "empty advertisement"
+        })
+    }
+    res.send({advertisement});
+})
 module.exports = router;

@@ -9,7 +9,12 @@ const express = require("express");
 const router = express.Router();
 
 router.get("/", auth, async (req, res, next) => {
-  const laundries = await Laundry.find();
+  let filter = {};
+  if(req.query.location)
+  {
+    filter = { location: req.query.location,}
+  }
+  const laundries = await Laundry.find(filter);
   res.send({ laundries });
 });
 
