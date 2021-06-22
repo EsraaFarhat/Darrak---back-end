@@ -44,6 +44,9 @@ const userSchema = mongoose.Schema({
     maxlength: 14,
     trim: true,
   },
+  nationalIdCard: {
+    type: String
+  },
   gender: {
     type: String,
     enum: ["male", "female"],
