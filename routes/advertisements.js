@@ -39,6 +39,12 @@ router.get("/:id", auth, async (req, res) => {
       message: "the advertisement with given ID was not found",
     });
   }
+  if (advertisement.hidden) {
+    advertisement.hidden = false;
+    advertisement.save();
+    // console.log(advertisement);
+  }
+
   res.status(200).send({ advertisement });
 });
 
@@ -95,7 +101,7 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res) => {
 });
 
 router.get("/get/useradvertisement", auth, async (req, res) => {
-  console.log(req.user);
+  // console.log(req.user);
   const userAdvertidementList = await Advertisement.find({
     owner: req.user._id,
   }).sort({ publishedAt: -1 });
