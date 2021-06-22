@@ -12,7 +12,7 @@ const mongoose = require('mongoose');
 const router = express.Router();
 
 router.get('/',auth, async(req, res) => {
-    const favourites = await Favourite.find({userFrom: req.user._id});
+    const favourites = await Favourite.find({userFrom: req.user._id}).populate('advertismentFrom');
     res.send({favourites});
 });
 
@@ -40,7 +40,6 @@ async function getFavourites(req, res, next) {
     let favourite
     try {
         favourite = await Favourite.findOne({advertismentFrom: req.params.advId, userFrom: req.user._id})
-        // {advertismentFrom: req.params.advId, userFrom: req.user._id}
       if (favourite == null) {
         return res.status(404).json({ message: 'Cannot find favourite' })
       }
