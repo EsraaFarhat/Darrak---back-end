@@ -28,6 +28,7 @@ router.post("/", async (req, res, next) => {
     id: user._id,
     fname: user.fname,
     lname: user.lname,
+    role: user.role
   });
 });
 

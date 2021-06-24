@@ -9,7 +9,7 @@ const advertisementSchema = mongoose.Schema({
   location:{
     type: String,
     enum: ["Talkha", "El-mashaya","Hy-ElGamaa", "Mit-Khamees"],
-    required: true,
+    required:true,
   },
   address: {
     type: String,

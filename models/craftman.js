@@ -27,8 +27,10 @@ const craftManSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  location: {
+  location:{
     type: String,
+    enum: ["Talkha", "El-mashaya","Hy-ElGamaa", "Mit-Khamees"],
+    required: true
   },
   rating: {
     type: Number,

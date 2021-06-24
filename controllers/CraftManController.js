@@ -2,7 +2,14 @@ const { CraftMan, validate } = require("../models/craftman");
 const _ = require("lodash");
 
 exports.getAllCraftMen = async (req, res, next) => {
-  const craftmen = await CraftMan.find();
+  let filter = {};
+    if(req.query.location)
+    {
+        filter = {
+                    location: req.query.location,
+                }
+    }
+  const craftmen = await CraftMan.find(filter);
   // res.send(craftmen);
   res.status(200).json({
     status: "success",
