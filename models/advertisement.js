@@ -2,14 +2,16 @@ const mongoose = require("mongoose");
 require("./user");
 
 const advertisementSchema = mongoose.Schema({
-  images: [{
+  images: [
+    {
+      type: String,
+      required: true,
+    },
+  ],
+  location: {
     type: String,
+    enum: ["Talkha", "El-mashaya", "Hy-ElGamaa", "Mit-Khamees"],
     required: true,
-  }],
-  location:{
-    type: String,
-    enum: ["Talkha", "El-mashaya","Hy-ElGamaa", "Mit-Khamees"],
-    required:true,
   },
   address: {
     type: String,
@@ -24,27 +26,35 @@ const advertisementSchema = mongoose.Schema({
     default: false,
   },
   owner: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
   },
-  publishedAt:{ 
+  publishedAt: {
     type: Date,
     default: Date.now(),
   },
   apartmentArea: {
     type: Number,
-    required: true
+    required: true,
   },
-  noOfRooms:{
+  noOfRooms: {
     type: Number,
-    required: true
+    required: true,
   },
   description: {
     type: String,
   },
+  hidden: {
+    type: Boolean,
+    default: true,
+  },
 });
 
+advertisementSchema.pre("find", function (next) {
+  this.find({ hidden: { $ne: true } });
+  next();
+});
 
 const Advertisement = mongoose.model("Advertisement", advertisementSchema);
 
@@ -64,4 +74,3 @@ function validateAdvertisement(advertisement) {
 
 module.exports.Advertisement = Advertisement;
 module.exports.validate = validateAdvertisement;
-
