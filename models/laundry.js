@@ -36,6 +36,7 @@ function validateLaundry(laundry) {
     name: Joi.string().required(),
     phoneNumber: Joi.string().length(11).required(),
     address: Joi.string().required(),
+    location: Joi.string()
   });
   return schema.validate(laundry);
 }
@@ -46,6 +47,7 @@ function validateEditLaundry(laundry) {
     name: Joi.string(),
     phoneNumber: Joi.string().length(11),
     address: Joi.string(),
+    location: Joi.string()
   });
   return schema.validate(laundry);
 }

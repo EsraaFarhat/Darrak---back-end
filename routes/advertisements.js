@@ -77,6 +77,7 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res) => {
       "apartmentArea",
       "noOfRooms",
       "description",
+      "location"
     ]),
     { new: true }
   );

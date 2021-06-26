@@ -14,6 +14,7 @@ exports.createAd = async (req, res, next) => {
     apartmentArea: req.body.apartmentArea,
     noOfRooms: req.body.noOfRooms,
     description: req.body.description,
+    location: req.body.location
   });
 
   const createAdvertisement = await advertisement.save();

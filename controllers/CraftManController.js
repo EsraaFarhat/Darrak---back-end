@@ -31,6 +31,7 @@ exports.createCraftMan = async (req, res, next) => {
       "phoneNumber",
       "profession",
       "location",
+      "rating"
     ])
   );
 
@@ -73,6 +74,7 @@ exports.updateCraftMan = async (req, res, next) => {
     "phoneNumber",
     "profession",
     "location",
+    "rating"
   ]);
   craftman = await CraftMan.findByIdAndUpdate(id, craftman, { new: true });
 
