@@ -12,6 +12,7 @@ const advertisements = require("./routes/advertisements");
 const laundries = require("./routes/laundries");
 const restaurants = require("./routes/restaurants");
 const craftmen = require("./routes/craftmen");
+const craftManRatings = require("./routes/craftManRatings");
 
 const favourites = require("./routes/favourites");
 
@@ -30,6 +31,7 @@ app.use("/api/advertisements", advertisements);
 app.use("/api/laundries", laundries);
 app.use("/api/restaurants", restaurants);
 app.use("/api/craftmen", craftmen);
+app.use("/api/craftmen/rating", craftManRatings);
 
 app.use("/api/favourites", favourites);
 

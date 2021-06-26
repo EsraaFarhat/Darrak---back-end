@@ -17,20 +17,6 @@ const favouriteSchema = mongoose.Schema({
 
 const Favourite = mongoose.model("Favourite", favouriteSchema);
 
-function validateFavourite(favourite) {
-  const schema = Joi.object({
-    images: Joi.array().required(),
-    address: Joi.string().required(),
-    price: Joi.number().required(),
-    internet: Joi.Boolean(),
-    apartmentArea: Joi.number().required(),
-    noOfRooms: Joi.number().required(),
-    description: Joi.string(),
-    publishedAt: Joi.Date(),
-  });
-  return schema.validate(favourite);
-}
 
 module.exports.Favourite = Favourite;
-module.exports.validate = validateFavourite;
 
