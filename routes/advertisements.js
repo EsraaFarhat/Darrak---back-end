@@ -20,7 +20,7 @@ router.get('/',auth, async (req,res)=>{
                     location: req.query.location,
                 }
     }
-    const advertisement = await Advertisement.find(filter).sort({'publishedAt': -1});
+    const advertisement = await Advertisement.find(filter).populate('owner').sort({'publishedAt': -1});
     if(!advertisement){
         res.status(500).json({
             success: false,
