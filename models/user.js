@@ -45,7 +45,8 @@ const userSchema = mongoose.Schema({
     trim: true,
   },
   nationalIdCard: {
-    type: String
+    type: String,
+    default: ""
   },
   gender: {
     type: String,
