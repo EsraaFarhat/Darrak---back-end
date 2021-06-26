@@ -5,6 +5,7 @@ const adController = require("../controllers/adController");
 
 const { Advertisement } = require("../models/advertisement");
 const { User } = require("../models/user");
+const { Favourite } = require("../models/favourite")
 const _ = require("lodash");
 
 const express = require("express");
@@ -95,12 +96,18 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res) => {
   }
 
   const advertisement = await Advertisement.findByIdAndRemove(req.params.id);
+  const favourites = await Favourite.find({advertismentFrom: req.params.id})
+  let favID = favourites.map(a => a._id)[0];
+  console.log(favID)
+  
   if (!advertisement) {
     res.status(500).json({
       success: false,
       message: "the advertisement with given ID was not found",
     });
   } else {
+    
+    await Favourite.findByIdAndRemove(favID)
     return res.status(200).json({
       success: true,
       message: "advertisement is deleted",
