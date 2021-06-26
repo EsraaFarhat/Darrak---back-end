@@ -1,15 +1,19 @@
 const auth = require("../middleware/auth");
-const isAdmin = require("../middleware/isAdmin");
 
+const { CraftMan } = require("../models/craftman");
 const { CraftManRating } = require("../models/craftManRating");
 
-const _ = require("lodash");
+const mongoose = require("mongoose");
 const express = require("express");
 
 const router = express.Router();
 
 router.get("/:id", auth, async (req, res, next) => {
   let id = req.params.id;
+  if (!mongoose.isValidObjectId(id)) {
+    res.status(400).send({ message: "Invaild Id." });
+  }
+
   const craftManRatings = await CraftManRating.findById(id).populate("userId");
 
   if (!craftManRatings)
@@ -21,6 +25,10 @@ router.get("/:id", auth, async (req, res, next) => {
 });
 
 router.post("/", auth, async (req, res, next) => {
+  const craftMan = await CraftMan.findById(req.body.craftManId);
+  if (!craftMan)
+    return res.status(404).send({ message: "Craft Man is not found." });
+
   craftManRating = new CraftManRating({
     craftManId: req.body.craftManId,
     userId: req.user._id,
@@ -33,7 +41,15 @@ router.post("/", auth, async (req, res, next) => {
 });
 
 router.delete("/:id", auth, async (req, res, next) => {
-  let id = req.params.id;
+    
+    let id = req.params.id;
+    const craftMan = await CraftMan.findById(id);
+  if (!craftMan)
+    return res.status(404).send({ message: "Craft Man is not found." });
+
+  if (!mongoose.isValidObjectId(id)) {
+    res.status(400).send({ message: "Invaild Id." });
+  }
 
   const craftManRating = await CraftManRating.findOneAndRemove({
     craftManId: id,
