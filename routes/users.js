@@ -153,11 +153,14 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
 router.delete("/:id", [auth, hasPrivilege], async (req, res, next) => {
   let id = req.params.id;
 
-  const user = await User.findByIdAndRemove(id, {
-    useFindAndModify: false,
-  });
+  // const user = await User.findByIdAndRemove(id, {
+  //   useFindAndModify: false,
+  // });
+  const user = await User.findById(id);
 
   if (!user) return res.status(404).send({ message: "User not found" });
+
+  await user.remove();
 
   res.send({
     user: _.pick(user, [

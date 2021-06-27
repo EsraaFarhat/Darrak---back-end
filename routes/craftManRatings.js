@@ -14,7 +14,7 @@ router.get("/:id", auth, async (req, res, next) => {
     res.status(400).send({ message: "Invaild Id." });
   }
 
-  const craftManRatings = await CraftManRating.findById(id).populate("userId");
+  const craftManRatings = await CraftManRating.find({craftManId: id}).populate("userId");
 
   if (!craftManRatings)
     return res

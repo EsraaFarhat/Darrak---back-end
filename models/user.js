@@ -4,6 +4,8 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const { Favourite } = require("../models/favourite");
+
 
 const userSchema = mongoose.Schema({
   image: {
@@ -125,6 +127,12 @@ userSchema.methods.generateAuthToken = function () {
 };
 
 const User = mongoose.model("User", userSchema);
+
+userSchema.pre('remove', async function(next){
+  await Favourite.deleteMany({userFrom: this._id}).exec();
+  console.log(this._id);
+  next();
+});
 
 function validateUser(user) {
   const schema = Joi.object({
