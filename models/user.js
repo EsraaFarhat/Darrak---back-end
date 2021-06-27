@@ -9,7 +9,7 @@ const userSchema = mongoose.Schema({
   image: {
     type: String,
     default:
-      "https://genslerzudansdentistry.com/wp-content/uploads/2015/11/anonymous-user.png",
+      "https://www.bootdey.com/img/Content/avatar/avatar7.png",
   },
   fname: {
     type: String,

@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const craftManSchema = mongoose.Schema({
+  image: {
+    type: String,
+    default:
+      "https://www.bootdey.com/img/Content/avatar/avatar7.png",
+  },
   fname: {
     type: String,
     required: true,
