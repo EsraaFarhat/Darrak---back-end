@@ -79,6 +79,10 @@ const userSchema = mongoose.Schema({
     enum: ["not verified", "pending", "verified"],
     default: "not verified",
   },
+  isBlocked: {
+    type: Boolean,
+    default: false,
+  },
   passwordResetExpires: Date,
   passwordResetToken: String,
 });

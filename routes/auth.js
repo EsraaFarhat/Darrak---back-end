@@ -12,23 +12,29 @@ router.post("/", async (req, res, next) => {
   let user = await User.findOne({ email: req.body.email });
   if (!user)
     return res.status(400).send({ message: "Invalid email or password!" });
-  console.log("email ok");
+  // console.log("email ok");
   const validPassword = await bcrypt.compare(req.body.password, user.password);
-  console.log("validPassword = ", validPassword);
-  console.log("req.body.password= ", req.body.password);
-  console.log("user.password= ", user.password);
+  // console.log("validPassword = ", validPassword);
+  // console.log("req.body.password= ", req.body.password);
+  // console.log("user.password= ", user.password);
 
   if (!validPassword)
     return res.status(400).send({ message: "Invalid email or password!" });
+
+  if (user.isBlocked)
+    return res
+      .status(400)
+      .send({ isBlocked: true, message: "This Account has been blocked." });
 
   const token = user.generateAuthToken();
 
   res.json({
     api_token: token,
+    isBlocked: false,
     id: user._id,
     fname: user.fname,
     lname: user.lname,
-    role: user.role
+    role: user.role,
   });
 });
 
