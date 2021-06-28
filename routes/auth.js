@@ -24,13 +24,13 @@ router.post("/", async (req, res, next) => {
   if (user.isBlocked)
     return res
       .status(400)
-      .send({ isBlocked: true, message: "This Account has been blocked." });
+      .send({ isBlocked: user.isBlocked, message: "This Account has been blocked." });
 
   const token = user.generateAuthToken();
 
   res.json({
     api_token: token,
-    isBlocked: false,
+    isBlocked: user.isBlocked,
     id: user._id,
     fname: user.fname,
     lname: user.lname,

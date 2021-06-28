@@ -48,6 +48,7 @@ router.post("/", async (req, res, next) => {
       "rating",
       "role",
       "status",
+      "isBlocked",
     ])
   );
 
@@ -79,6 +80,7 @@ router.post("/", async (req, res, next) => {
       "rating",
       "role",
       "status",
+      "isBlocked",
     ]),
   });
 });
@@ -124,6 +126,7 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
       "phoneNumber",
       "rating",
       "status",
+      "isBlocked",
     ]),
     {
       new: true,
@@ -146,6 +149,7 @@ router.patch("/:id", [auth, hasPrivilege], async (req, res, next) => {
       "rating",
       "role",
       "status",
+      "isBlocked",
     ]),
   });
 });
@@ -174,6 +178,7 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res, next) => {
       "rating",
       "role",
       "status",
+      "isBlocked",
     ]),
   });
 });
@@ -204,6 +209,7 @@ router.get("/:id", auth, async (req, res, next) => {
       "rating",
       "role",
       "status",
+      "isBlocked",
     ]),
   });
 });
