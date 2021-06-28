@@ -44,7 +44,6 @@ const craftManSchema = mongoose.Schema({
   },
 });
 
-const CraftMan = mongoose.model("CraftMan", craftManSchema);
 
 function validateCraftMan(craftMan) {
   const schema = Joi.object({
@@ -58,5 +57,6 @@ function validateCraftMan(craftMan) {
   return schema.validate(craftMan);
 }
 
+const CraftMan = mongoose.model("CraftMan", craftManSchema);
 module.exports.CraftMan = CraftMan;
 module.exports.validate = validateCraftMan;

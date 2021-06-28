@@ -1,4 +1,5 @@
 const { CraftMan, validate } = require("../models/craftman");
+const { CraftManRating } = require("../models/craftManRating");
 const _ = require("lodash");
 
 exports.getAllCraftMen = async (req, res, next) => {
@@ -44,8 +45,13 @@ exports.createCraftMan = async (req, res, next) => {
 
 exports.deleteCraftMan = async (req, res, next) => {
   let id = req.params.id;
-  const craftman = await CraftMan.findByIdAndRemove(id);
+  // const craftman = await CraftMan.findByIdAndRemove(id);
+  const craftman = await CraftMan.findById(id);
   if (!craftman) return res.status(404).send({ message: "account not found" });
+
+  await CraftManRating.deleteMany({craftManId: id}).exec();
+
+  await craftman.remove();
   res.status(200).json({
     status: "success",
     message: "deleted",

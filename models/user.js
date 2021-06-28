@@ -4,7 +4,9 @@ const config = require("config");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
-const { Favourite } = require("../models/favourite");
+const { Advertisement } = require('./advertisement');
+const { Favourite } = require("./favourite");
+const { CraftManRating } = require("./craftManRating");
 
 
 const userSchema = mongoose.Schema({
@@ -126,11 +128,11 @@ userSchema.methods.generateAuthToken = function () {
   return token;
 };
 
-const User = mongoose.model("User", userSchema);
 
 userSchema.pre('remove', async function(next){
+  await Advertisement.deleteMany({owner: this._id}).exec();
   await Favourite.deleteMany({userFrom: this._id}).exec();
-  console.log(this._id);
+  await CraftManRating.deleteMany({userId: this._id}).exec();
   next();
 });
 
@@ -166,6 +168,7 @@ function validateEditUser(user) {
   return schema.validate(user);
 }
 
+const User = mongoose.model("User", userSchema);
 module.exports.User = User;
 module.exports.validate = validateUser;
 module.exports.editValidate = validateEditUser;

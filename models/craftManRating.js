@@ -1,6 +1,7 @@
-const mongoose = require("mongoose");
 require("./user");
 require("./craftman");
+
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const craftManRatingSchema = mongoose.Schema({
