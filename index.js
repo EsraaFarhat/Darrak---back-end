@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const express = require("express");
 const winston = require("winston");
 const cors = require("cors");
+const config = require("config");
 
 require("dotenv/config");
 require("express-async-errors");
@@ -54,7 +55,7 @@ winston.add(
 winston.add(new winston.transports.File({ filename: "logFile.log" }));
 
 mongoose
-  .connect(process.env.CONNECTION_STRING, {
+  .connect(config.get("db"), {
     useNewUrlParser: true,
     useCreateIndex: true,
     useFindAndModify: false,
