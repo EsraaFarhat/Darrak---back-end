@@ -39,13 +39,13 @@ const upload = multer({
 });
 
 // user request to verify his account
-router.patch('/', [auth, upload.single('nationalIdCard')], async (req, res, next) => {
+router.patch('/', auth, async (req, res, next) => {
     let id = req.user._id;
-    if(req.file == undefined) return res.status(400).send({message: "National Id Card is required."})
+    if(req.body.nationalIdCard == undefined) return res.status(400).send({message: "National Id Card is required."})
 
     let user = await User.findByIdAndUpdate(
         id, {
-            nationalIdCard: req.file.path,
+            nationalIdCard: req.body.nationalIdCard,
             status: "pending"
         }, {
             new: true,
