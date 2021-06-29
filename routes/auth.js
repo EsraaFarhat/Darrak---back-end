@@ -35,6 +35,7 @@ router.post("/", async (req, res, next) => {
     fname: user.fname,
     lname: user.lname,
     role: user.role,
+    status: user.status
   });
 });
 
