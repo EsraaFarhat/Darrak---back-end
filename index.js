@@ -49,6 +49,10 @@ process.on("unhandledRejection", (ex) => {
   throw ex;
 });
 
+if(!config.get('jwtPrivateKey')){
+  throw new Error('FATAL ERROR: jwtPrivateKey is not defined.');  
+}
+
 winston.add(
   new winston.transports.Console({ colorize: true, prettyPrint: true })
 );

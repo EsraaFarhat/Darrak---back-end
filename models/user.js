@@ -127,7 +127,7 @@ userSchema.methods.generateAuthToken = function () {
       role: this.role,
       status: this.status,
     },
-    process.env.jwtPrivateKey
+    config.get("jwtPrivateKey")
   );
   return token;
 };

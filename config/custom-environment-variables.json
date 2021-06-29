@@ -1,3 +1,4 @@
 {
+    "jwtPrivateKey": "Darrak_jwtPrivateKey",
     "db": "Darrak_db"
 }

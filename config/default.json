@@ -1,3 +1,4 @@
 {
-    "db": "Darrak_db"
+    "jwtPrivateKey": "",
+    "db": "mongodb+srv://abdalllah22:zxzx1212@cluster0.boioz.mongodb.net/Darrak?retryWrites=true&w=majority"
 }
