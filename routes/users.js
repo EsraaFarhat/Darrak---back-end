@@ -59,14 +59,19 @@ router.post("/", async (req, res, next) => {
 
   await user.save();
 
-  //send welcome mail
-  const url = `${req.protocol}://${req.get("host")}/api/users/me`;
-  // http://127.0.0.1:3000/me
-  // http://127.0.0.1:3000/api/users/me
-  await new Email(
-    user,
-    `Welcome to Darrak, we're glad to have you 🏠`
-  ).sendWelcome();
+  console.log("before sending mail !");
+  try {
+    //send welcome mail
+    const url = `${req.protocol}://${req.get("host")}/api/users/me`;
+    // http://127.0.0.1:3000/me
+    // http://127.0.0.1:3000/api/users/me
+    await new Email(
+      user,
+      `Welcome to Darrak, we're glad to have you 🏠`
+    ).sendWelcome();
+  } catch (e) {
+    console.log("error in sending welcome mail !");
+  }
 
   res.header("x-auth-token", token).send({
     user: _.pick(user, [
@@ -213,7 +218,5 @@ router.get("/:id", auth, async (req, res, next) => {
     ]),
   });
 });
-
-
 
 module.exports = router;
