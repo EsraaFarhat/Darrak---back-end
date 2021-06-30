@@ -50,7 +50,8 @@ exports.getCheckoutSession = async (req, res, next) => {
       // cancel_url: `${req.protocol}://${req.get("host")}/add-advertisment`,
 
       success_url: `https://darrak.netlify.app/advertisment/${req.ad}`,
-      cancel_url: `https://darrak.netlify.appadd-advertisment`,
+      cancel_url: `https://darrak.netlify.app/add-advertisment`,
+
       customer_email: req.user.email,
       // client_reference_id: req.params.tourId,
       line_items: [
