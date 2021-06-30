@@ -14,7 +14,7 @@ exports.createAd = async (req, res, next) => {
     apartmentArea: req.body.apartmentArea,
     noOfRooms: req.body.noOfRooms,
     description: req.body.description,
-    location: req.body.location
+    location: req.body.location,
   });
 
   const createAdvertisement = await advertisement.save();
@@ -44,11 +44,13 @@ exports.getCheckoutSession = async (req, res, next) => {
       // success_url: `${req.protocol}://${req.get("host")}/home?ad=${
       //   req.ad
       // }&user=${req.user.id}`,
-      success_url: `http://localhost:3001/advertisment/${req.ad}`,
+      // success_url: `http://localhost:3001/advertisment/${req.ad}`,
       // success_url: `${req.protocol}://${req.get("host")}/my-tours?alert=booking`,
-      cancel_url: `http://localhost:3001/add-advertisment`,
+      // cancel_url: `http://localhost:3001/add-advertisment`,
       // cancel_url: `${req.protocol}://${req.get("host")}/add-advertisment`,
 
+      success_url: `https://darrak.netlify.app/advertisment/${req.ad}`,
+      cancel_url: `https://darrak.netlify.appadd-advertisment`,
       customer_email: req.user.email,
       // client_reference_id: req.params.tourId,
       line_items: [
@@ -108,18 +110,18 @@ exports.getCheckoutSession = async (req, res, next) => {
   }
 };
 
-exports.makeHiddenAdFalse = async (req, res, next) => {
-  // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
-  const { ad } = req.query;
+// exports.makeHiddenAdFalse = async (req, res, next) => {
+//   // This is only TEMPORARY, because it's UNSECURE: everyone can make bookings without paying
+//   const { ad } = req.query;
 
-  if (!ad) return next();
+//   if (!ad) return next();
 
-  const newAd = await Advertisement.findByIdAndUpdate(
-    ad,
-    { hidden: "false" },
-    { new: true }
-  );
-  console.log("newAd = ", newAd);
+//   const newAd = await Advertisement.findByIdAndUpdate(
+//     ad,
+//     { hidden: "false" },
+//     { new: true }
+//   );
+//   console.log("newAd = ", newAd);
 
-  res.redirect(req.originalUrl.split("?")[0]);
-};
+//   res.redirect(req.originalUrl.split("?")[0]);
+// };
