@@ -19,9 +19,11 @@ exports.forgotPassword = async (req, res, next) => {
 
   // 3) Send it to user's email
   try {
-    const resetURL = `${req.protocol}://${req.get(
-      "host"
-    )}/api/users/resetPassword/${resetToken}`;
+    // const resetURL = `${req.protocol}://${req.get(
+    //   "host"
+    // )}/api/users/resetPassword/${resetToken}`;
+    // const resetURL = `https://darrak.netlify.app/resetPassword/${resetToken}`;
+    const resetURL = `http://localhost:3001/resetPassword/${resetToken}`;
     await new Email(user, resetURL).sendPasswordReset();
 
     res.status(200).json({
