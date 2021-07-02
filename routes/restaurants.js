@@ -81,7 +81,19 @@ async function getRestaurant(req, res, next) {
   
     res.restaurant = restaurant
     next()
-  }
-  
+}
+
+router.get('/get/count',async (req,res)=>{
+    const resCount = await Restaurant.countDocuments((count)=> count)
+    if(!resCount){
+        res.status(500).json({
+            success: false
+        })
+    }
+    res.send({
+        count: resCount
+    });
+  })
+
 
 module.exports = router;
