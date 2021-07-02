@@ -71,7 +71,7 @@ router.get("/:id", auth, async (req, res, next) => {
   res.send({ laundry });
 });
 
-router.get('/get/count',async (req,res)=>{
+router.get('/get/count', [auth, isAdmin], async (req,res)=>{
   const lanCount = await Laundry.countDocuments((count)=> count)
   if(!lanCount){
       res.status(500).json({

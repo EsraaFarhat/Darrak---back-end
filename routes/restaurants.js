@@ -83,7 +83,7 @@ async function getRestaurant(req, res, next) {
     next()
 }
 
-router.get('/get/count',async (req,res)=>{
+router.get('/get/count', [auth, isAdmin], async (req,res)=>{
     const resCount = await Restaurant.countDocuments((count)=> count)
     if(!resCount){
         res.status(500).json({

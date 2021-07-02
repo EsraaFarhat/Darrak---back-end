@@ -1,6 +1,8 @@
 const auth = require("../middleware/auth");
 const hasPrivilege = require("../middleware/hasPrivilege");
 const isVerified = require("../middleware/isVerified");
+const isAdmin = require("../middleware/isAdmin");
+
 const adController = require("../controllers/adController");
 
 const { Advertisement } = require("../models/advertisement");
@@ -129,7 +131,7 @@ router.get("/get/useradvertisement", auth, async (req, res) => {
   }
   res.send(userAdvertidementList);
 });
-router.get('/get/count',async (req,res)=>{
+router.get('/get/count', [auth, isAdmin], async (req,res)=>{
   const advCount = await Advertisement.countDocuments((count)=> count)
   if(!advCount){
       res.status(500).json({
@@ -141,7 +143,7 @@ router.get('/get/count',async (req,res)=>{
   });
 })
 
-router.get('/get/totalsales', async (req, res)=> {
+router.get('/get/totalsales', [auth, isAdmin], async (req, res)=> {
   const totalSales= await Advertisement.aggregate([
       { $group: { _id: null , totalsales : { $sum : { $multiply: [ "$price", (10/100) ] } }}}
   ])
