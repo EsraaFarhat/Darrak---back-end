@@ -14,6 +14,10 @@ const mongoose = require("mongoose");
 const { filter } = require("lodash");
 const router = express.Router();
 
+
+
+
+
 router.get("/", auth, async (req, res) => {
   let filter = {};
   if (req.query.location) {
@@ -135,6 +139,18 @@ router.get('/get/count',async (req,res)=>{
   res.send({
       count: advCount
   });
+})
+
+router.get('/get/totalsales', async (req, res)=> {
+  const totalSales= await Advertisement.aggregate([
+      { $group: { _id: null , totalsales : { $sum : { $multiply: [ "$price", (10/100) ] } }}}
+  ])
+
+  if(!totalSales) {
+      return res.status(400).send('The order sales cannot be generated')
+  }
+
+  res.send({totalsales: totalSales.pop().totalsales})
 })
 
 module.exports = router;
