@@ -19,4 +19,16 @@ router
   .patch(auth, isAdmin, CraftManController.updateCraftMan)
   .delete(auth, isAdmin, CraftManController.deleteCraftMan);
 
+router.get('/get/count',async (req,res)=>{
+  const craCount = await CraftMan.countDocuments((count)=> count)
+  if(!craCount){
+      res.status(500).json({
+          success: false
+      })
+  }
+  res.send({
+      count: craCount
+  });
+})
+
 module.exports = router;
