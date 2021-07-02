@@ -219,4 +219,16 @@ router.get("/:id", auth, async (req, res, next) => {
   });
 });
 
+router.get('/get/count',async (req,res)=>{
+  const userCount = await User.countDocuments((count)=> count)
+  if(!userCount){
+      res.status(500).json({
+          success: false
+      })
+  }
+  res.send({
+      count: userCount
+  });
+})
+
 module.exports = router;

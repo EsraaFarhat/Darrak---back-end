@@ -82,5 +82,6 @@ async function getRestaurant(req, res, next) {
     res.restaurant = restaurant
     next()
   }
+  
 
 module.exports = router;
