@@ -15,7 +15,13 @@ router.post("/forgetPassword", authController.forgotPassword);
 router.patch("/resetPassword/:token", authController.resetPassword);
 
 router.get("/", [auth, isAdmin], async (req, res, next) => {
-  const users = await User.find();
+  let filter = {};
+  if (req.query.status) {
+    filter = {
+      status: req.query.status,
+    };
+  }
+  const users = await User.find(filter);
   res.send({ users });
 });
 
