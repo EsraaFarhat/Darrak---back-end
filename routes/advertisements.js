@@ -125,5 +125,16 @@ router.get("/get/useradvertisement", auth, async (req, res) => {
   }
   res.send(userAdvertidementList);
 });
+router.get('/get/count',async (req,res)=>{
+  const advCount = await Advertisement.countDocuments((count)=> count)
+  if(!advCount){
+      res.status(500).json({
+          success: false
+      })
+  }
+  res.send({
+      count: advCount
+  });
+})
 
 module.exports = router;
