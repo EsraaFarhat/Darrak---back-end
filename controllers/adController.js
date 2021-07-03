@@ -4,7 +4,7 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.createAd = async (req, res, next) => {
   // console.log("req.body.address", req.body.address);
-  const advertisement = new Advertisement({
+  const ad = {
     images: req.body.images,
     address: req.body.address,
     price: req.body.price,
@@ -15,7 +15,8 @@ exports.createAd = async (req, res, next) => {
     noOfRooms: req.body.noOfRooms,
     description: req.body.description,
     location: req.body.location,
-  });
+  };
+  const advertisement = new Advertisement(ad);
 
   const createAdvertisement = await advertisement.save();
   if (createAdvertisement) {
@@ -24,10 +25,6 @@ exports.createAd = async (req, res, next) => {
     // console.log("removing Ad");
     // createAdvertisement.remove();
     return next();
-    // return res.status(201).send({
-    //   message: "new advertisement created",
-    //   data: createAdvertisement,
-    // });
   }
   return res.status(500).send({ message: " Error in Creating Advertisement." });
 };
@@ -51,7 +48,7 @@ exports.getCheckoutSession = async (req, res, next) => {
       // cancel_url: `http://localhost:3001/add-advertisment`,
       // cancel_url: `${req.protocol}://${req.get("host")}/add-advertisment`,
 
-      success_url: `https://darrak.netlify.app/advertisment/${req.ad}`,
+      success_url: `https://darrak.netlify.app`,
       cancel_url: `https://darrak.netlify.app/add-advertisment`,
 
       customer_email: req.user.email,
@@ -61,7 +58,7 @@ exports.getCheckoutSession = async (req, res, next) => {
           name: ad.apartmentArea,
           description: ad.description,
           images: [ad.images[0]],
-          amount: ad.price * 10,
+          amount: ad.price * 10 * 0.5,
           currency: "EGP",
           quantity: 1,
         },
