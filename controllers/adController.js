@@ -19,8 +19,10 @@ exports.createAd = async (req, res, next) => {
 
   const createAdvertisement = await advertisement.save();
   if (createAdvertisement) {
-    req.ad = createAdvertisement.id;
-    // console.log("req.ad", req.ad);
+    // req.ad = createAdvertisement.id;
+    req.ad = createAdvertisement;
+    // console.log("removing Ad");
+    // createAdvertisement.remove();
     return next();
     // return res.status(201).send({
     //   message: "new advertisement created",
@@ -34,11 +36,11 @@ exports.getCheckoutSession = async (req, res, next) => {
   try {
     // 1) Get the currently booked tour
     // console.log(req.ad);
-    const ad = await Advertisement.findById(req.ad);
-    // console.log("ad = ", ad);
+    const ad = req.ad;
+    console.log("ad.id = ", req.ad.id);
 
     // 2) Create checkout session
-    console.log("ad.price * 0.1 = ", ad.price * 0.1);
+    // console.log("ad.price * 0.1 = ", ad.price * 0.1);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       // success_url: `${req.protocol}://${req.get("host")}/home?ad=${
@@ -53,7 +55,7 @@ exports.getCheckoutSession = async (req, res, next) => {
       cancel_url: `https://darrak.netlify.app/add-advertisment`,
 
       customer_email: req.user.email,
-      // client_reference_id: req.params.tourId,
+      client_reference_id: ad.id,
       line_items: [
         {
           name: ad.apartmentArea,
@@ -126,3 +128,34 @@ exports.getCheckoutSession = async (req, res, next) => {
 
 //   res.redirect(req.originalUrl.split("?")[0]);
 // };
+
+const createAdCheckout = async (session) => {
+  console.log("session.client_reference_id = ", session.client_reference_id);
+
+  const advertisement = await Advertisement.findById(
+    session.client_reference_id
+  ).populate("owner");
+  advertisement.hidden = false;
+  console.log("advertisement.hidden = ", advertisement.hidden);
+  await advertisement.save();
+};
+
+exports.webhookCheckout = (req, res, next) => {
+  const signature = req.headers["stripe-signature"];
+  console.log("in webhookCheckout");
+  let event;
+  try {
+    event = stripe.webhooks.constructEvent(
+      req.body,
+      signature,
+      process.env.STRIPE_WEBHOOK_SECRET
+    );
+  } catch (err) {
+    return res.status(400).send(`Webhook error: ${err.message}`);
+  }
+  console.log("if (event.type === 'checkout.session.completed')");
+  if (event.type === "checkout.session.completed")
+    createAdCheckout(event.data.object);
+
+  res.status(200).json({ received: true });
+};
