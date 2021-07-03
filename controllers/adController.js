@@ -15,7 +15,7 @@ exports.createAd = async (req, res, next) => {
     noOfRooms: req.body.noOfRooms,
     description: req.body.description,
     location: req.body.location,
-  }
+  };
   const advertisement = new Advertisement(ad);
 
   const createAdvertisement = await advertisement.save();
@@ -23,7 +23,7 @@ exports.createAd = async (req, res, next) => {
     // req.ad = createAdvertisement.id;
     req.ad = ad;
     // Advertisement.findByIdAndDelete(createAdvertisement.id);
-    createAdvertisement.remove()
+    createAdvertisement.remove();
     return next();
   }
   return res.status(500).send({ message: " Error in Creating Advertisement." });
@@ -127,13 +127,14 @@ exports.getCheckoutSession = async (req, res, next) => {
 // };
 
 const createAdCheckout = async (session) => {
-  const advertisement = new Advertisement(session.client_reference_id;);
-   await advertisement.save();
+  console.log("session.client_reference_id = ", session.client_reference_id);
+  const advertisement = new Advertisement(session.client_reference_id);
+  await advertisement.save();
 };
 
 exports.webhookCheckout = (req, res, next) => {
   const signature = req.headers["stripe-signature"];
-
+  console.log("in webhookCheckout");
   let event;
   try {
     event = stripe.webhooks.constructEvent(
@@ -144,7 +145,7 @@ exports.webhookCheckout = (req, res, next) => {
   } catch (err) {
     return res.status(400).send(`Webhook error: ${err.message}`);
   }
-
+  console.log("if (event.type === 'checkout.session.completed')");
   if (event.type === "checkout.session.completed")
     createAdCheckout(event.data.object);
 
