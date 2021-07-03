@@ -47,7 +47,7 @@ const advertisementSchema = mongoose.Schema({
   },
   hidden: {
     type: Boolean,
-    default: false,
+    default: true,
   },
 });
 
