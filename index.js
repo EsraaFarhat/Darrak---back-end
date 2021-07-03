@@ -15,12 +15,20 @@ const restaurants = require("./routes/restaurants");
 const craftmen = require("./routes/craftmen");
 const craftManRatings = require("./routes/craftManRatings");
 const favourites = require("./routes/favourites");
-const user_verification = require('./routes/user_verification');
-const admin = require('./routes/admin');
+const user_verification = require("./routes/user_verification");
+const admin = require("./routes/admin");
+const adController = require("./controllers/adController");
 
 const error = require("./middleware/error");
 
 const app = express();
+
+// Stripe webhook, BEFORE body-parser, because stripe needs the body as stream
+app.post(
+  "/webhook-checkout",
+  express.raw({ type: "application/json" }),
+  adController.webhookCheckout
+);
 
 app.use(express.json());
 app.use(cors());
@@ -33,8 +41,8 @@ app.use("/api/restaurants", restaurants);
 app.use("/api/craftmen", craftmen);
 app.use("/api/craftmen/rating", craftManRatings);
 app.use("/api/favourites", favourites);
-app.use('/api/verify', user_verification);
-app.use('/api/admin', admin);
+app.use("/api/verify", user_verification);
+app.use("/api/admin", admin);
 
 app.use(error);
 
@@ -49,8 +57,8 @@ process.on("unhandledRejection", (ex) => {
   throw ex;
 });
 
-if(!config.get('jwtPrivateKey')){
-  throw new Error('FATAL ERROR: jwtPrivateKey is not defined.');  
+if (!config.get("jwtPrivateKey")) {
+  throw new Error("FATAL ERROR: jwtPrivateKey is not defined.");
 }
 
 winston.add(
