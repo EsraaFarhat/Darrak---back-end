@@ -6,7 +6,6 @@ const isAdmin = require("../middleware/isAdmin");
 const adController = require("../controllers/adController");
 
 const { Advertisement } = require("../models/advertisement");
-const { AdvertisementRating } = require("../models/advertisementRating");
 const { User } = require("../models/user");
 const { Favourite } = require("../models/favourite");
 const _ = require("lodash");
@@ -101,7 +100,6 @@ router.delete("/:id", [auth, hasPrivilege], async (req, res) => {
   if (!mongoose.isValidObjectId(req.params.id)) {
     res.status(400).send({ message: "Invaild ID" });
   }
-  await AdvertisementRating.deleteMany({AdvertisementId: req.params.id}).exec();
 
   const advertisement = await Advertisement.findByIdAndRemove(req.params.id);
   const favourites = await Favourite.find({ advertismentFrom: req.params.id });

@@ -7,7 +7,6 @@ const crypto = require("crypto");
 const { Advertisement } = require('./advertisement');
 const { Favourite } = require("./favourite");
 const { CraftManRating } = require("./craftManRating");
-const { AdvertisementRating } = require("./advertisementRating");
 
 
 const userSchema = mongoose.Schema({
@@ -138,7 +137,6 @@ userSchema.pre('remove', async function(next){
   await Advertisement.deleteMany({owner: this._id}).exec();
   await Favourite.deleteMany({userFrom: this._id}).exec();
   await CraftManRating.deleteMany({userId: this._id}).exec();
-  await AdvertisementRating.deleteMany({userId: this._id}).exec();
   next();
 });
 
